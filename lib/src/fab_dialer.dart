@@ -2,82 +2,88 @@ part of flutter_fab_dialer;
 
 class FabDialer extends StatefulWidget {
   // AnimationStyle is an optional parameter to avoid breaking changes
-  const FabDialer(this._fabMiniMenuItemList, this._fabColor, this._fabIcon,
-      [this._fabAnimationStyle = AnimationStyle.defaultAnimation]);
+  const FabDialer(this.fabMiniMenuItemList, this.fabColor, this.fabIcon,
+      [this.fabAnimationStyle = AnimationStyle.defaultAnimation]);
 
-  final List<FabMiniMenuItem> _fabMiniMenuItemList;
-  final Color _fabColor;
-  final Icon _fabIcon;
-  final AnimationStyle _fabAnimationStyle;
+  final List<FabMiniMenuItem> fabMiniMenuItemList;
+  final Color fabColor;
+  final Icon fabIcon;
+  final AnimationStyle fabAnimationStyle;
 
   @override
   FabDialerState createState() => new FabDialerState(
-      _fabMiniMenuItemList, _fabColor, _fabIcon, _fabAnimationStyle);
+        fabMiniMenuItemList: fabMiniMenuItemList,
+        fabColor: fabColor,
+        fabIcon: fabIcon,
+        fabAnimationStyle: fabAnimationStyle,
+      );
 }
 
 class FabDialerState extends State<FabDialer> with TickerProviderStateMixin {
-  FabDialerState(this._fabMiniMenuItemList, this._fabColor, this._fabIcon,
-      this._fabAnimationStyle);
+  FabDialerState(
+      {required this.fabMiniMenuItemList,
+      required this.fabColor,
+      required this.fabIcon,
+      required this.fabAnimationStyle});
 
-  int _angle = 90;
-  bool _isRotated = true;
-  final List<FabMiniMenuItem> _fabMiniMenuItemList;
-  final Color _fabColor;
-  final Icon _fabIcon;
-  final AnimationStyle _fabAnimationStyle;
-  List<FabMenuMiniItemWidget> _fabMenuItems;
+  int angle = 90;
+  bool isRotated = true;
+  final List<FabMiniMenuItem> fabMiniMenuItemList;
+  final Color fabColor;
+  final Icon fabIcon;
+  final AnimationStyle fabAnimationStyle;
+  late List<FabMenuMiniItemWidget> fabMenuItems;
 
-  AnimationController _controller;
+  late AnimationController controller;
 
   @override
   void initState() {
-    _controller = new AnimationController(
+    controller = new AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 180),
     );
 
-    _controller.reverse();
+    controller.reverse();
 
-    setFabMenu(this._fabMiniMenuItemList);
+    setFabMenu(this.fabMiniMenuItemList);
     super.initState();
   }
 
   void setFabMenu(List<FabMiniMenuItem> fabMenuList) {
-    List<FabMenuMiniItemWidget> fabMenuItems = new List();
-    for (int i = 0; i < _fabMiniMenuItemList.length; i++) {
+    List<FabMenuMiniItemWidget> fabMenuItems = [];
+    for (int i = 0; i < fabMiniMenuItemList.length; i++) {
       fabMenuItems.add(new FabMenuMiniItemWidget(
-        tooltip: _fabMiniMenuItemList[i].tooltip,
-        text: _fabMiniMenuItemList[i].text,
-        elevation: _fabMiniMenuItemList[i].elevation,
-        icon: _fabMiniMenuItemList[i].icon,
-        image: _fabMiniMenuItemList[i].image,
+        tooltip: fabMiniMenuItemList[i].tooltip,
+        text: fabMiniMenuItemList[i].text!,
+        elevation: fabMiniMenuItemList[i].elevation,
+        icon: fabMiniMenuItemList[i].icon,
+        image: fabMiniMenuItemList[i].image,
         index: i,
-        onPressed: _fabMiniMenuItemList[i].onPressed,
-        textColor: _fabMiniMenuItemList[i].textColor,
-        fabColor: _fabMiniMenuItemList[i].fabColor,
-        chipColor: _fabMiniMenuItemList[i].chipColor,
-        controller: _controller,
-        animationStyle: _fabAnimationStyle,
-        itemCount: _fabMiniMenuItemList.length,
+        onPressed: fabMiniMenuItemList[i].onPressed,
+        textColor: fabMiniMenuItemList[i].textColor,
+        fabColor: fabMiniMenuItemList[i].fabColor,
+        chipColor: fabMiniMenuItemList[i].chipColor,
+        controller: controller,
+        animationStyle: fabAnimationStyle,
+        itemCount: fabMiniMenuItemList.length,
         // Send item count to each item to help animation calc
-        hideWidget:
-            _fabMiniMenuItemList[i].hideOnClick == false ? null : _rotate,
+        hideWidget: fabMiniMenuItemList[i].hideOnClick == false ? null : rotate,
       ));
     }
 
-    this._fabMenuItems = fabMenuItems;
+    this.fabMenuItems = fabMenuItems;
   }
 
-  void _rotate() {
+  void rotate() {
     setState(() {
-      if (_isRotated) {
-        _angle = 45;
-        _isRotated = false;
-        _controller.forward();
+      if (isRotated) {
+        angle = 45;
+        isRotated = false;
+        controller.forward();
       } else {
-        _angle = 90;
-        _isRotated = true;
-        _controller.reverse();
+        angle = 90;
+        isRotated = true;
+        controller.reverse();
       }
     });
   }
@@ -91,18 +97,18 @@ class FabDialerState extends State<FabDialer> with TickerProviderStateMixin {
           children: <Widget>[
             new Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: _fabMenuItems,
+              children: fabMenuItems,
             ),
             new Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 new FloatingActionButton(
                     child: new RotationTransition(
-                      turns: new AlwaysStoppedAnimation(_angle / 360),
-                      child: _fabIcon,
+                      turns: new AlwaysStoppedAnimation(angle / 360),
+                      child: fabIcon,
                     ),
-                    backgroundColor: _fabColor,
-                    onPressed: _rotate)
+                    backgroundColor: fabColor,
+                    onPressed: rotate)
               ],
             ),
           ],

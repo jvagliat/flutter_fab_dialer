@@ -6,16 +6,16 @@ typedef void HideWidget();
 
 class FabMiniMenuItem {
   double elevation;
-  String text;
-  Icon icon;
-  ImageProvider image;
-  Color fabColor;
-  Color chipColor;
+  String? text;
+  Icon? icon;
+  ImageProvider? image;
+  Color? fabColor;
+  Color? chipColor;
   String tooltip;
-  Color textColor;
-  AnimationStyle animationStyle;
+  Color? textColor;
+  AnimationStyle? animationStyle;
   OnFabMiniMenuItemPressed onPressed;
-  bool hideOnClick;
+  bool? hideOnClick;
 
   FabMiniMenuItem.withText(
       this.icon,
@@ -59,38 +59,38 @@ class FabMiniMenuItem {
 
 class FabMenuMiniItemWidget extends StatelessWidget {
   const FabMenuMiniItemWidget(
-      {Key key,
-      this.elevation,
-      this.text,
-      this.icon,
-      this.image,
-      this.fabColor,
-      this.chipColor,
-      this.textColor,
-      this.tooltip,
-      this.index,
-      this.controller,
-      this.onPressed,
+      {Key? key,
+      required this.elevation,
+      required this.text,
+      required this.icon,
+      required this.image,
+      required this.fabColor,
+      required this.chipColor,
+      required this.textColor,
+      required this.tooltip,
+      required this.index,
+      required this.controller,
+      required this.onPressed,
       this.hideWidget,
-      this.animationStyle,
-      this.itemCount})
+      required this.animationStyle,
+      required this.itemCount})
       : super(key: key);
   final double elevation;
-  final String text;
-  final Icon icon;
-  final ImageProvider image;
-  final Color fabColor;
-  final Color chipColor;
+  final String? text;
+  final Icon? icon;
+  final ImageProvider? image;
+  final Color? fabColor;
+  final Color? chipColor;
   final String tooltip;
-  final Color textColor;
+  final Color? textColor;
   final int index;
   final int itemCount;
   final OnFabMiniMenuItemPressed onPressed;
-  final HideWidget hideWidget;
+  final HideWidget? hideWidget;
   final AnimationController controller;
   final AnimationStyle animationStyle;
 
-  Widget _buildAnimation(BuildContext context, Widget child) {
+  Widget _buildAnimation(BuildContext context, Widget? child) {
     final double deviceHeight = MediaQuery.of(context).size.height;
 
     switch (animationStyle) {
@@ -208,14 +208,14 @@ class FabMenuMiniItemWidget extends StatelessWidget {
         ? new Chip(
             backgroundColor: chipColor,
             label: new Text(
-              text,
+              text??"",
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style:
                   new TextStyle(color: textColor, fontWeight: FontWeight.bold),
             ),
           )
-        : null;
+        : Container();
   }
 
   Widget _getFloatingActionButton() {
@@ -229,7 +229,7 @@ class FabMenuMiniItemWidget extends StatelessWidget {
             heroTag: "$index",
             onPressed: () {
               onPressed();
-              hideWidget == null ? null : hideWidget();
+              hideWidget == null ? null : hideWidget!();
             })
         : new FloatingActionButton(
             elevation: elevation,
@@ -238,10 +238,10 @@ class FabMenuMiniItemWidget extends StatelessWidget {
             child: new ConstrainedBox(
               constraints: new BoxConstraints.expand(),
               child: new Container(
-                decoration: new BoxDecoration(
+                decoration: image == null?null: new BoxDecoration(
                   shape: BoxShape.circle,
                   image: new DecorationImage(
-                    image: image,
+                    image: image!,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -250,7 +250,7 @@ class FabMenuMiniItemWidget extends StatelessWidget {
             heroTag: "$index",
             onPressed: () {
               onPressed();
-              hideWidget == null ? null : hideWidget();
+              hideWidget == null ? null : hideWidget!();
             });
   }
 
